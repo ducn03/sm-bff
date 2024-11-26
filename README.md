@@ -58,9 +58,18 @@ If you want to learn more about building native executables, please consult <htt
 - REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
 - Reactive MySQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the MySQL database using the reactive pattern
 - WebSockets ([guide](https://quarkus.io/guides/websockets)): WebSocket communication channel support
+- YAML Configuration ([guide](https://quarkus.io/guides/config-yaml)): Use YAML to configure your Quarkus application
 - Redis Client ([guide](https://quarkus.io/guides/redis)): Connect to Redis in either imperative or reactive style
 
 ## Provided Code
+
+### YAML Config
+
+Configure your application with YAML
+
+[Related guide section...](https://quarkus.io/guides/config-reference#configuration-examples)
+
+The Quarkus application configuration is located in `src/main/resources/application.yml`.
 
 ### REST
 
