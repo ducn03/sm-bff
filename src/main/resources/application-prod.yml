@@ -1,0 +1,7 @@
+# File: src/main/resources/application-dev.yml
+
+quarkus:
+  log:
+    console:
+      enable: true
+    level: INFO

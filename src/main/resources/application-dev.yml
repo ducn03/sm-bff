@@ -1,0 +1,26 @@
+# File: src/main/resources/application-dev.yml
+"%dev":
+  quarkus:
+    redis:
+      hosts:
+        - ${COM_HC_REDIS_HOST:redis://localhost}:${COM_HC_REDIS_PORT:6379}
+      password: ${COM_SM_SERVER_BFF_REDIS_PASSWORD:}
+      database: ${COM_SM_SERVER_BFF_REDIS_DATABASE:1}
+
+    datasource:
+      db-kind: mysql
+      jdbc:
+        url: mysql://localhost:3307/thecoffeebox
+        driver: com.mysql.cj.jdbc.Driver
+        username: root
+        password: root
+      devservices:
+        enabled: false
+    hibernate-orm:
+      database:
+        generation: drop-and-create
+
+    log:
+      console:
+        enable: true
+      level: INFO
