@@ -3,6 +3,6 @@ quarkus:
   http:
     port: ${COM_SM_SERVER_BFF_PORT:5000}
     test-port: ${COM_SM_SERVER_BFF_TEST_PORT:5000}
-    host: ${COM_SM_SERVER_BFF_HOST:0.0.0.0}
+    host: ${COM_SM_SERVER_BFF_HOST:localhost}
   profile:
     - dev
