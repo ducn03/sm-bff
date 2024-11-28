@@ -5,16 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-public class HCLogger implements ILogger {
+public class SMLogger implements ILogger {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
 
-    private static HCLogger logger;
-    public static HCLogger getInstance() {
+    private static SMLogger logger;
+    public static SMLogger getInstance() {
         if (logger != null) {
             return logger;
         }
-        return logger = new HCLogger();
+        return logger = new SMLogger();
     }
 
     @Override

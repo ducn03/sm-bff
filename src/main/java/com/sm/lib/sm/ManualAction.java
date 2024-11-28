@@ -1,4 +1,4 @@
-package com.hc.lib.sm;
+package com.sm.lib.sm;
 
 public class ManualAction<T extends SMData<T>> extends Action<T>{
     public ManualAction(String key, State<T> nextState) {

@@ -1,6 +1,6 @@
-package com.hc.lib.sm;
+package com.sm.lib.sm;
 
-import com.hc.jpa.domain.SM;
+import com.sm.jpa.domain.SM;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,8 @@
 package com.sm.lib.service.controller;
 
+import com.sm.lib.exception.ErrorCodes;
 import com.sm.lib.service.controller.dto.ResponseData;
-import com.sm.lib.utils.JsonHelper;
+import com.sm.lib.helper.JsonHelper;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.Response;
@@ -28,12 +29,9 @@ public class ControllerServiceImpl implements ControllerService {
             return Response.ok(JsonHelper.toJson(ResponseData.success(item)))
                     .header("Content-Type", "application/json")
                     .build();
-        }).onFailure().recoverWithItem(t -> {
+        }).onFailure().recoverWithUni(t -> {
             log.error("Error occurred while processing success response", t);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ResponseData.error(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Internal Server Error"))
-                    .header("Content-Type", "application/json")
-                    .build();
+            return error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "System Error");
         });
     }
 

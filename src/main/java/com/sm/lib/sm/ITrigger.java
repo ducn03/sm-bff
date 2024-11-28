@@ -1,4 +1,4 @@
-package com.hc.lib.sm;
+package com.sm.lib.sm;
 
 public interface ITrigger<T extends SMData> {
 

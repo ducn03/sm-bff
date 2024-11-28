@@ -1,13 +1,13 @@
-package com.hc.lib.sm;
+package com.sm.lib.sm;
 
-import com.hc.jpa.domain.SM;
-import com.hc.jpa.repository.SMRepository;
-import com.hc.lib.exception.ErrorCodes;
-import com.hc.lib.utils.AppThrower;
+import com.sm.jpa.domain.SM;
+import com.sm.jpa.repository.SMRepository;
+import com.sm.lib.exception.ErrorCodes;
+import com.sm.lib.utils.AppThrower;
+import io.smallrye.mutiny.Uni;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Optional;
 
 public abstract class StateMachine<I extends SMInput, T extends SMData<T>> {
 
@@ -26,7 +26,7 @@ public abstract class StateMachine<I extends SMInput, T extends SMData<T>> {
     public abstract T loadData(I input, Template<T> template);
 
     public void saveData(T data, Template<T> template) {
-        this.smRepository.save(data.getSm());
+        this.smRepository.persistAndFlush(data.getSm());
         saveDataInternal(data, template);
     }
 
@@ -41,15 +41,15 @@ public abstract class StateMachine<I extends SMInput, T extends SMData<T>> {
         sm.setActionStatus(state.getDefaultActionStatus());
         long epochSecond = Instant.now().getEpochSecond();
         sm.setUpdatedAt(new Timestamp(epochSecond * 1000));
-        return smRepository.save(sm);
+        return (SM) smRepository.persistAndFlush(sm);
     }
 
     protected SM loadInternal(I input, Template<T> template) {
-        Optional<SM> smOptional = smRepository.findByTemplateIdAndMasterIdOrderByIdDesc(template.getId(), input.getMasterId());
-        if (smOptional.isEmpty()) {
+        Uni<SM> smOptional = smRepository.findByTemplateIdAndMasterIdOrderByIdDesc(template.getId(), input.getMasterId());
+        if (smOptional == null) {
             AppThrower.ep(ErrorCodes.SYSTEM.SM.BAD_REQUEST_INPUT_NOT_FOUND);
         }
-        return smOptional.get();
+        return (SM) smOptional;
     }
 
     // on auto State Machine

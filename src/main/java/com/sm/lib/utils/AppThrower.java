@@ -1,6 +1,6 @@
-package com.hc.lib.utils;
+package com.sm.lib.utils;
 
-import com.hc.lib.exception.AppException;
+import com.sm.lib.exception.AppException;
 
 public class AppThrower {
 

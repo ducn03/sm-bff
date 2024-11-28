@@ -1,4 +1,4 @@
-package com.hc.lib.exception;
+package com.sm.lib.exception;
 
 import lombok.Getter;
 

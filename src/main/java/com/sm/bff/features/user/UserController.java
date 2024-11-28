@@ -2,8 +2,12 @@ package com.sm.bff.features.user;
 
 import com.sm.bff.service.UserDataService;
 import com.sm.jpa.domain.User;
+import com.sm.lib.exception.ErrorCodes;
 import com.sm.lib.service.controller.ControllerService;
+import com.sm.lib.helper.HttpHelper;
+import com.sm.lib.utils.AppThrower;
 import io.smallrye.mutiny.Uni;
+import io.vertx.ext.web.RoutingContext;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -36,19 +40,28 @@ public class UserController {
 
     @POST
     @Path("user")
-    public Uni<Response> create(){
-        return controllerService.success(userDataService.create(new User()));
+    public Uni<Response> create(RoutingContext request){
+        User user = HttpHelper.body(request, User.class);
+        if (user == null) AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
+        var result = userDataService.create(user);
+        return controllerService.success(result);
     }
 
-//    @POST
-//    @Path("/user")
-//    public Uni<User> update(){
-//        return userDataService.create(new User());
-//    }
-//
-//    @POST
-//    @Path("user")
-//    public Uni<User> delete(){
-//        return userDataService.create(new User());
-//    }
+    @PUT
+    @Path("/user")
+    public Uni<Response> update(RoutingContext request){
+        User user = HttpHelper.body(request, User.class);
+        if (user == null) AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
+        var result = userDataService.update(user.id, user);
+        return controllerService.success(result);
+    }
+
+    @DELETE
+    @Path("user")
+    public Uni<Response> delete(RoutingContext request){
+        User user = HttpHelper.body(request, User.class);
+        if (user == null) AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
+        var result = userDataService.delete(user.id);
+        return controllerService.success(result);
+    }
 }

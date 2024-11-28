@@ -1,9 +1,9 @@
-package com.hc.lib.sm;
+package com.sm.lib.sm;
 
-import com.hc.jpa.domain.SM;
-import com.hc.jpa.repository.SMRepository;
-import com.hc.lib.exception.ErrorCodes;
-import com.hc.lib.utils.AppThrower;
+import com.sm.jpa.domain.SM;
+import com.sm.jpa.repository.SMRepository;
+import com.sm.lib.exception.ErrorCodes;
+import com.sm.lib.utils.AppThrower;
 
 public abstract class ManualStateMachine<I extends SMInput, T extends SMData<T>> extends StateMachine<I, T> {
 

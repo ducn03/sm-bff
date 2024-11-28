@@ -1,4 +1,4 @@
-package com.hc.lib.utils;
+package com.sm.lib.utils;
 
 public abstract class LazyCache<T extends CacheData> implements ILazyCache<T> {
 

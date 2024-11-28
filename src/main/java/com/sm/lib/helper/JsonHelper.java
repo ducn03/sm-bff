@@ -1,4 +1,4 @@
-package com.sm.lib.utils;
+package com.sm.lib.helper;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;

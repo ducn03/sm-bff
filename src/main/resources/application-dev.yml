@@ -18,6 +18,9 @@
     hibernate-orm:
       database:
         generation: drop-and-create
+      log:
+        sql: true
+        format-sql: true
 
     log:
       console:
