@@ -5,12 +5,17 @@ import com.sm.lib.exception.ErrorCodes;
 import com.sm.lib.utils.AppThrower;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import lombok.CustomLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CustomLog
 public class HttpHelper {
+    private static final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
     /**
      * Lấy body của request và chuyển đổi sang một đối tượng cụ thể.
      *
@@ -30,8 +35,8 @@ public class HttpHelper {
             // Chuyển JsonObject thành đối tượng theo kiểu Class<T>
             return jsonObject.mapTo(clazz);
         } catch (Exception e) {
-            AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
-            return null; // Chỉ để làm hài lòng compiler
+            logger.warn("Exception error: " + e.getMessage());
+            return null;
         }
     }
 
