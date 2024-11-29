@@ -6,8 +6,6 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import java.util.Map;
-
 @ApplicationScoped
 public class TestSingleRequestService {
     private final RedisService redisService;
@@ -17,9 +15,9 @@ public class TestSingleRequestService {
         this.redisService = redisService;
     }
 
-    public Uni<Map<String, Object>> isRequested(String key, long ttl){
-        // runExample();
-        return redisService.hGetAll("hset");
+    public Uni<Boolean> isRequested(String key, long ttl){
+        runExample();
+        return redisService.singleRequest(key, ttl);
     }
 
     public void runExample() {
