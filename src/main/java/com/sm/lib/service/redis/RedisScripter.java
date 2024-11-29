@@ -1,35 +1,32 @@
 package com.sm.lib.service.redis;
 
-import com.sm.lib.config.RedisConfig;
 import com.sm.lib.helper.UniHelper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonArray;
-import io.vertx.redis.client.Command;
-import io.vertx.redis.client.Redis;
-import io.vertx.redis.client.Request;
 import io.vertx.redis.client.Response;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Singleton
 public class RedisScripter {
-    private final Redis redis;
     private final RedisCommander redisCommander;
-    private final String singleRequestScript;
+    private final String SINGLE_REQUEST_SCRIPT_PATH = "src/main/resources/script/redis/single-request.lua";
     private final String SUCCESS = "1";
     private final int KEY_QUANTITY = 2;
 
     @Inject
-    public RedisScripter(Redis redis, RedisCommander redisCommander, RedisConfig redisConfig) {
-        this.redis = redis;
+    public RedisScripter(RedisCommander redisCommander) {
         this.redisCommander = redisCommander;
-        this.singleRequestScript = redisConfig.getSingleRequestScript();
     }
 
     public Uni<Boolean> singleRequest(String key, long ttl) {
         try {
             return UniHelper.toBooleanUni(redisCommander.executeEvalCommand(
-                    singleRequestScript,
+                    loadScripts(SINGLE_REQUEST_SCRIPT_PATH),
                     KEY_QUANTITY,
                     JsonArray.of(key, String.valueOf(ttl)))
             );
@@ -40,7 +37,7 @@ public class RedisScripter {
 
     public boolean singleRequestSync(String key, long ttl) {
         try {
-            Response result = redisCommander.executeEvalCommand(singleRequestScript, KEY_QUANTITY,
+            Response result = redisCommander.executeEvalCommand(loadScripts(SINGLE_REQUEST_SCRIPT_PATH), KEY_QUANTITY,
                             JsonArray.of(key, String.valueOf(ttl)))
                             .toCompletableFuture()
                             .get();
@@ -51,5 +48,12 @@ public class RedisScripter {
         }
     }
 
+    private String loadScripts(String path) {
+        try {
+            return Files.readString(Path.of(path));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load RedisService script", e);
+        }
+    }
 
 }

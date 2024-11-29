@@ -1,7 +1,6 @@
 package com.sm.lib.service.redis;
 
 import com.sm.lib.helper.UniHelper;
-import io.vertx.redis.client.Redis;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -14,13 +13,11 @@ public class RedisService {
      * Expire time in second
      */
     private final String EX = "EX";
-    private final Redis redis;
     private final RedisScripter redisScripter;
     private final RedisCommander redisCommander;
 
     @Inject
-    public RedisService(Redis redis, RedisScripter redisScripter, RedisCommander redisCommander) {
-        this.redis = redis;
+    public RedisService(RedisScripter redisScripter, RedisCommander redisCommander) {
         this.redisScripter = redisScripter;
         this.redisCommander = redisCommander;
     }
