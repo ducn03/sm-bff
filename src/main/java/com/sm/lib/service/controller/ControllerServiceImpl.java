@@ -31,7 +31,7 @@ public class ControllerServiceImpl implements ControllerService {
                     .build();
         }).onFailure().recoverWithUni(t -> {
             log.error("Error occurred while processing success response", t);
-            return error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "System Error");
+            return systemError();
         });
     }
 
@@ -47,8 +47,7 @@ public class ControllerServiceImpl implements ControllerService {
     @Override
     public Uni<Response> systemError() {
         log.info("response system error");
-        return Uni.createFrom().item(Response.status(Response.Status.BAD_GATEWAY)
-                .entity(ResponseData.error(Response.Status.BAD_GATEWAY.getStatusCode(), "System Error"))
+        return Uni.createFrom().item(Response.ok(JsonHelper.toJson(ResponseData.error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "System Error")))
                 .header("Content-Type", "application/json")
                 .build());
     }

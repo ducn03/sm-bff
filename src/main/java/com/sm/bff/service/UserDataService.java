@@ -41,20 +41,6 @@ public class UserDataService {
         user.setFullname(updatedUser.getFullname());
     }
 
-
-    /**
-     * Các lỗi phổ biến và cách tránh
-     * Không đăng ký Uni từ delete():
-     *
-     * delete() không tự động thực thi nếu bạn không kết hợp nó vào pipeline.
-     * Gọi flush() không đồng bộ:
-     *
-     * Sử dụng flush() không nằm trong reactive pipeline sẽ không đảm bảo tính đồng bộ và gây ra lỗi.
-     * Xử lý lỗi không đầy đủ:
-     *
-     * Mọi thao tác trong reactive flow cần có xử lý lỗi rõ ràng bằng recoverWithItem.
-     */
-
     public Uni<Boolean> delete(Long id) {
         Uni<User> userUni = userRepository.findById(id);
         if (userUni == null) {

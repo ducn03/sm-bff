@@ -33,7 +33,6 @@ public class UserController {
     @GET
     @Path("user")
     public Uni<Response> get(@QueryParam("userId") long userId){
-        System.out.println(userId);
         var result = userDataService.getAll();
         return controllerService.success(result);
     }
