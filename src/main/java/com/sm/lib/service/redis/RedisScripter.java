@@ -31,7 +31,7 @@ public class RedisScripter {
                     JsonArray.of(key, String.valueOf(ttl)))
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed to execute RedisService script", e);
+            throw new RuntimeException("Failed to execute Redis script", e);
         }
     }
 
@@ -44,7 +44,7 @@ public class RedisScripter {
 
             return result != null && SUCCESS.equals(result.toString());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to execute RedisService script", e);
+            throw new RuntimeException("Failed to execute Redis script", e);
         }
     }
 
@@ -52,7 +52,7 @@ public class RedisScripter {
         try {
             return Files.readString(Path.of(path));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load RedisService script", e);
+            throw new RuntimeException("Failed to load Redis script", e);
         }
     }
 

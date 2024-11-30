@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import java.util.Map;
 
 @ApplicationScoped
-public class RedisService {
+public class Redis {
     /**
      * Expire time in second
      */
@@ -17,7 +17,7 @@ public class RedisService {
     private final RedisCommander redisCommander;
 
     @Inject
-    public RedisService(RedisScripter redisScripter, RedisCommander redisCommander) {
+    public Redis(RedisScripter redisScripter, RedisCommander redisCommander) {
         this.redisScripter = redisScripter;
         this.redisCommander = redisCommander;
     }
