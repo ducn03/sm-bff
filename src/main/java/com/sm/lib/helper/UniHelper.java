@@ -70,6 +70,28 @@ public class UniHelper {
                 });
     }
 
+    public static Uni<Long> toLongUni(CompletionStage<Response> stage) {
+        return Uni.createFrom()
+                .completionStage(stage)
+                .map(response -> response != null ? response.toLong() : null);
+    }
 
+    public static Uni<Map<String, Double>> toMapWithScoresUni(CompletionStage<Response> stage) {
+        return Uni.createFrom()
+                .completionStage(stage)
+                .map(response -> {
+                    if (response == null || response.size() == 0) {
+                        return Map.of();
+                    }
+                    Map<String, Double> result = new LinkedHashMap<>();
+                    List<Response> list = response.stream().toList();
+                    for (int i = 0; i < list.size(); i += 2) {
+                        String member = list.get(i).toString();
+                        Double score = Double.valueOf(list.get(i + 1).toString());
+                        result.put(member, score);
+                    }
+                    return result;
+                });
+    }
 
 }

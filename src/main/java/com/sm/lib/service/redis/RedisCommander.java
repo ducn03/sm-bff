@@ -15,6 +15,9 @@ import java.util.concurrent.CompletionStage;
 public class RedisCommander {
     private final Redis redis;
 
+    private final String WITHSCORES = "WITHSCORES";
+    private final String REV = "REV";
+
     public RedisCommander(Redis redis) {
         this.redis = redis;
     }
@@ -166,6 +169,97 @@ public class RedisCommander {
         return executeCommand(eval(args));
     }
 
+
+    /**
+     * FOR LEADERBOARD
+     */
+
+    /**
+     * Tạo request ZADD
+     * @param key
+     * @param score
+     * @param member
+     * @return
+     */
+
+    public Request zAdd(String key, double score, String member){
+        return buildRequest(Command.ZADD, key, score, member);
+    }
+
+    public CompletionStage<Response> executeZAdd(String key, double score, String member){
+        return executeCommand(zAdd(key, score, member));
+    }
+
+    public Request zIncrement(String key, double delta, String member){
+        return buildRequest(Command.ZINCRBY, key, delta, member);
+    }
+    public Request zDecrement(String key, double delta, String member){
+        return zIncrement(key, -delta, member);
+    }
+
+    public CompletionStage<Response> executeZIncrement(String key, double delta, String member){
+        return executeCommand(zIncrement(key, delta, member));
+    }
+
+    public CompletionStage<Response> executeZDecrement(String key, double delta, String member){
+        return executeCommand(zDecrement(key, delta, member));
+    }
+
+    public Request zRank(String key, String member){
+        return buildRequest(Command.ZRANK, key, member);
+    }
+
+    public CompletionStage<Response> executeZRank(String key, String member){
+        return executeCommand(zRank(key, member));
+    }
+
+    public Request zRevRank(String key, String member){
+        return buildRequest(Command.ZREVRANK, key, member);
+    }
+
+    public CompletionStage<Response> executeZRevRank(String key, String member){
+        return executeCommand(zRevRank(key, member));
+    }
+
+    public Request zRangeWithScores(String key, long start, long end){
+        return buildRequest(Command.ZRANGE, key, start, end, WITHSCORES);
+    }
+
+    public CompletionStage<Response> executeZRangeWithScores(String key, long start, long end){
+        return executeCommand(zRangeWithScores(key, start, end));
+    }
+
+    public Request zRevRangeWithScores(String key, long start, long end) {
+        // return buildRequest(Command.ZRANGE, key, start, end, REV, WITHSCORES);
+        return buildRequest(Command.ZREVRANGE, key, start, end, WITHSCORES);
+    }
+
+    public CompletionStage<Response> executeZRevRangeWithScores(String key, long start, long end){
+        return executeCommand(zRevRangeWithScores(key, start, end));
+    }
+
+    public Request zRemove(String key, String member){
+        return buildRequest(Command.ZREM, key, member);
+    }
+
+    public CompletionStage<Response> executeZRemove(String key, String member){
+        return executeCommand(zRemove(key, member));
+    }
+
+
+    /**
+     * Tạo request set TTL cho các key
+     */
+    public Request setExpire(String key, long ttl){
+        return buildRequest(Command.EXPIRE, key, ttl);
+    }
+
+    /**
+     *  Tạo request và execute cho các key
+     */
+    public CompletionStage<Response> executeSetExpire(String key, long ttl){
+        return executeCommand(setExpire(key, ttl));
+    }
 
     /**
      * Dùng để build request

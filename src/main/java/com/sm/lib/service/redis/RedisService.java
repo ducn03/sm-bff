@@ -54,6 +54,45 @@ public class RedisService {
         redisCommander.executeHDelCommand(key, hashKey);
     }
 
+    /**
+     * FOR Z LEADERBOARD
+     */
+    public void zAdd(String key, double score, String member){
+        redisCommander.executeZAdd(key, score, member);
+    }
+
+    public void zIncrement(String key, double delta, String member){
+        redisCommander.executeZIncrement(key, delta, member);
+    }
+
+    public void ZDecrement(String key, double delta, String member){
+        redisCommander.executeZDecrement(key, delta, member);
+    }
+
+    public Uni<Long> zRank(String key, String member){
+        return UniHelper.toLongUni(redisCommander.executeZRank(key, member));
+    }
+
+    public Uni<Long> zRevRank(String key, String member){
+        return UniHelper.toLongUni(redisCommander.executeZRevRank(key, member));
+    }
+
+    public Uni<Map<String, Double>> zRangeWithScores(String key, long start, long end){
+        return UniHelper.toMapWithScoresUni(redisCommander.executeZRangeWithScores(key, start, end));
+    }
+
+    public Uni<Map<String, Double>> zRevRangeWithScores(String key, long start, long end){
+        return UniHelper.toMapWithScoresUni(redisCommander.executeZRevRangeWithScores(key, start, end));
+    }
+
+    public void zRemove(String key, String member){
+        redisCommander.executeZRemove(key, member);
+    }
+
+    public void setExpire(String key, long ttl){
+        redisCommander.executeSetExpire(key, ttl);
+    }
+
     public Uni<Boolean> singleRequest(String key, long ttl) {
         return redisScripter.singleRequest(key, ttl);
     }

@@ -45,5 +45,53 @@ public class TestSingleRequestService {
                         failure -> System.err.println("Failed to perform HGetAll: " + failure.getMessage())
                 );
         redisService.hDelete("hset", "3");
+
+        // ZSet: Leaderboard Example
+        String leaderboardKey = "leaderboard";
+
+        // Add scores to the leaderboard
+        redisService.zAdd(leaderboardKey, 100, "Alice");
+        redisService.zAdd(leaderboardKey, 200, "Bob");
+        redisService.zAdd(leaderboardKey, 150, "Charlie");
+
+        // Increment score for a member
+        redisService.zIncrement(leaderboardKey, 50, "Alice");
+
+        // Decrement score for a member
+        redisService.ZDecrement(leaderboardKey, 30, "Bob");
+
+        // Get rank (ascending order)
+        redisService.zRank(leaderboardKey, "Alice")
+                .subscribe().with(
+                        rank -> System.out.println("ZRank result for 'Alice': " + rank),
+                        failure -> System.err.println("Failed to perform ZRank: " + failure.getMessage())
+                );
+
+        // Get reverse rank (descending order)
+        redisService.zRevRank(leaderboardKey, "Alice")
+                .subscribe().with(
+                        rank -> System.out.println("ZRevRank result for 'Alice': " + rank),
+                        failure -> System.err.println("Failed to perform ZRevRank: " + failure.getMessage())
+                );
+
+        // Get leaderboard (ascending order with scores)
+        redisService.zRangeWithScores(leaderboardKey, 0, -1)
+                .subscribe().with(
+                        map -> System.out.println("ZRangeWithScores result: " + JsonHelper.toJson(map)),
+                        failure -> System.err.println("Failed to perform ZRangeWithScores: " + failure.getMessage())
+                );
+
+        // Get leaderboard (descending order with scores)
+        redisService.zRevRangeWithScores(leaderboardKey, 0, -1)
+                .subscribe().with(
+                        map -> System.out.println("ZRevRangeWithScores result: " + JsonHelper.toJson(map)),
+                        failure -> System.err.println("Failed to perform ZRevRangeWithScores: " + failure.getMessage())
+                );
+
+        // Remove a member from leaderboard
+        redisService.zRemove(leaderboardKey, "Charlie");
+
+        // Set expiration time for the leaderboard
+        redisService.setExpire(leaderboardKey, 100);
     }
 }
