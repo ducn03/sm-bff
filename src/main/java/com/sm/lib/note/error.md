@@ -21,4 +21,34 @@ public Uni<Boolean> deleteById(Long id) {
 }
 ```
 
+## 2. Khi làm việc với module, lỗi không inject được service của module này qua module cần được inject
+> **_Truy cập vào link để lấy bản cập nhật mới_**
+```dbn-psql
+https://quarkus.io/guides/cdi-reference#bean_discovery
+```
+> **_Đặt code trong file pom.xml của modue phụ thuộc_**
+```example
+Ví dụ: module A inject service của module B
+ thì đặt code trong file pom.xml của module B
+```
+```dbn-psql
+<build>
+  <plugins>
+    <plugin>
+      <groupId>io.smallrye</groupId>
+      <artifactId>jandex-maven-plugin</artifactId>
+      <version>3.2.3</version>
+      <executions>
+        <execution>
+          <id>make-index</id>
+          <goals>
+            <goal>jandex</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+```
+
 

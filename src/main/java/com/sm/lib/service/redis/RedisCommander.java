@@ -155,6 +155,18 @@ public class RedisCommander {
     }
 
     /**
+     * Dùng để đếm số tăng tự động
+     * @param key
+     * @return
+     */
+    public Request increment(String key){
+        return buildRequest(Command.INCR, key);
+    }
+    public CompletionStage<Response> executeIncrementCommand(String key) {
+        return executeCommand(increment(key));
+    }
+
+    /**
      * Tạo lệnh EVAL
      */
     public Request eval(Object... args) {

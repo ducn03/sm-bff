@@ -47,11 +47,9 @@ public class UserDataService {
             return null;
         }
 
-        Uni<Boolean> result = userUni.onItem().transformToUni(user -> {
-            return userRepository.delete(user).onItem().transformToUni(userDelete ->{
-                return userRepository.flush().onItem().transform(flushed -> true);
-            });
-        });
+        Uni<Boolean> result = userUni.onItem().transformToUni(user
+                -> userRepository.delete(user).onItem().transformToUni(userDelete
+                -> userRepository.flush().onItem().transform(flushed -> true)));
 
         return result;
     }

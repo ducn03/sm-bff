@@ -46,6 +46,11 @@ public class TestSingleRequestService {
                 );
         redis.hDelete("hset", "3");
 
+        // increment
+        redis.increment("increment");
+        redis.increment("increment");
+        redis.increment("increment");
+
         // ZSet: Leaderboard Example
         String leaderboardKey = "leaderboard";
 

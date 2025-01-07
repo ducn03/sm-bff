@@ -46,7 +46,7 @@ public class ControllerServiceImpl implements ControllerService {
 
     @Override
     public Uni<Response> systemError() {
-        log.info("response system error");
+        log.trace("response system error");
         return Uni.createFrom().item(Response.ok(JsonHelper.toJson(ResponseData.error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "System Error")))
                 .header("Content-Type", "application/json")
                 .build());

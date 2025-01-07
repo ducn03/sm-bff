@@ -17,4 +17,10 @@ public interface ErrorCodes {
             int BAD_REQUEST_ACTION_NOT_FOUND = 40001003;
         }
     }
+
+    interface LOGIN {
+        int PHONE_NOT_FOUND = 40012001;
+        int WRONG_PASSWORD = 40012002;
+        int WRONG_USERNAME = 40012003;
+    }
 }

@@ -1,5 +1,6 @@
 package com.sm.lib.service.redis;
 
+import com.sm.lib.constant.RedisConstant;
 import com.sm.lib.helper.UniHelper;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,7 +13,7 @@ public class Redis {
     /**
      * Expire time in second
      */
-    private final String EX = "EX";
+    private final String EX = RedisConstant.TIME.EX;
     private final RedisScripter redisScripter;
     private final RedisCommander redisCommander;
 
@@ -52,6 +53,10 @@ public class Redis {
 
     public void hDelete(String key, String hashKey){
         redisCommander.executeHDelCommand(key, hashKey);
+    }
+
+    public Uni<Long> increment(String key) {
+        return UniHelper.toLongUni(redisCommander.executeIncrementCommand(key));
     }
 
     /**
