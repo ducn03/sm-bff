@@ -1,6 +1,6 @@
 package com.sm.jpa.domain;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
+import com.sm.jpa.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

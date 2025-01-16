@@ -5,10 +5,13 @@ import com.sm.jpa.repository.UserRepository;
 import com.sm.lib.helper.UniHelper;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.CustomLog;
 
 import java.util.List;
 
 @ApplicationScoped
+@CustomLog
 public class UserDataService {
     private final UserRepository userRepository;
 
@@ -21,8 +24,9 @@ public class UserDataService {
         return userRepository.findAll().list();
     }
 
+    @Transactional
     public Uni<User> create(User user) {
-        return userRepository.persistAndFlush(user);
+        return userRepository.persist(user);
     }
 
     public Uni<User> update(Long id, User updatedUser) {

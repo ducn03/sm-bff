@@ -6,6 +6,7 @@ import com.sm.lib.exception.ErrorCodes;
 import com.sm.lib.service.controller.ControllerService;
 import com.sm.lib.helper.HttpHelper;
 import com.sm.lib.utils.AppThrower;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.inject.Singleton;
@@ -14,6 +15,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/")
 @Singleton
+@WithTransaction
 public class UserController {
     private final ControllerService controllerService;
     private final UserDataService userDataService;
@@ -51,7 +53,7 @@ public class UserController {
     public Uni<Response> update(RoutingContext request){
         User user = HttpHelper.body(request, User.class);
         if (user == null) AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
-        var result = userDataService.update(user.id, user);
+        var result = userDataService.update(user.getId(), user);
         return controllerService.success(result);
     }
 
@@ -60,7 +62,7 @@ public class UserController {
     public Uni<Response> delete(RoutingContext request){
         User user = HttpHelper.body(request, User.class);
         if (user == null) AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
-        var result = userDataService.delete(user.id);
+        var result = userDataService.delete(user.getId());
         return controllerService.success(result);
     }
 }

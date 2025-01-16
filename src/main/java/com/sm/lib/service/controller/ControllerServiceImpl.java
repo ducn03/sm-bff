@@ -35,13 +35,23 @@ public class ControllerServiceImpl implements ControllerService {
         });
     }
 
-    @Override
     public Uni<Response> error(int error, String message) {
-        log.info("response error:" + error);
-        log.info(message);
-        return Uni.createFrom().item(Response.ok(JsonHelper.toJson(ResponseData.error(error, message)))
-                .header("Content-Type", "application/json")
-                .build());
+        log.info(error + ": " + message);
+        return Uni.createFrom().item(ResponseData.error(error, message))
+                .onItem().transform(responseData -> {
+                    Response.ResponseBuilder builder = switch (error) {
+                        case ErrorCodes.SYSTEM.UNAUTHORIZED -> Response.status(Response.Status.UNAUTHORIZED);
+                        case ErrorCodes.SYSTEM.BAD_REQUEST -> Response.status(Response.Status.BAD_REQUEST);
+                        case ErrorCodes.SYSTEM.PAGE_NOT_FOUND -> Response.status(Response.Status.NOT_FOUND);
+                        case ErrorCodes.SYSTEM.FORBIDDEN -> Response.status(Response.Status.FORBIDDEN);
+                        case ErrorCodes.SYSTEM.SYSTEM_ERROR -> Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                        case ErrorCodes.SYSTEM.BAD_GATEWAY -> Response.status(Response.Status.BAD_GATEWAY);
+                        default -> Response.ok();
+                    };
+                    return builder.entity(JsonHelper.toJson(responseData))
+                            .header("Content-Type", "application/json")
+                            .build();
+                });
     }
 
     @Override

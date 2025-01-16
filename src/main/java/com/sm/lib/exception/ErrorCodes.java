@@ -7,6 +7,7 @@ public interface ErrorCodes {
         int BAD_REQUEST = 400;
         int BAD_GATEWAY = 502;
         int UNAUTHORIZED = 401;
+        int FORBIDDEN = 403;
 
         int PAGE_NOT_FOUND = 404;
 
