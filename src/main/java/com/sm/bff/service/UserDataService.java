@@ -29,11 +29,12 @@ public class UserDataService {
         return userRepository.persist(user);
     }
 
+
     public Uni<User> update(Long id, User updatedUser) {
         Uni<User> userUni = userRepository.findById(id);
-        return userUni.onItem().transformToUni(user -> {
+        return userUni.onItem().transform(user -> {
             setUserData(user, updatedUser);
-            return userRepository.persistAndFlush(user).replaceWith(user);
+            return user;
         });
     }
 
@@ -45,24 +46,23 @@ public class UserDataService {
         user.setFullname(updatedUser.getFullname());
     }
 
+    @Transactional
     public Uni<Boolean> delete(Long id) {
         Uni<User> userUni = userRepository.findById(id);
         if (userUni == null) {
             return null;
         }
 
-        Uni<Boolean> result = userUni.onItem().transformToUni(user
-                -> userRepository.delete(user).onItem().transformToUni(userDelete
-                -> userRepository.flush().onItem().transform(flushed -> true)));
-
-        return result;
+        return userUni.onItem().transformToUni(user
+                -> userRepository.delete(user).replaceWith(true)
+                ).onFailure().recoverWithItem(false);
     }
 
+    @Transactional
     public Uni<Boolean> deleteById(Long id) {
         return userRepository.deleteById(id)
-                .onItem().transformToUni(user -> {
-                    return userRepository.flush().onItem().transform(flushed -> true);
-                }).onFailure().recoverWithItem(false);
+                .replaceWith(true)
+                .onFailure().recoverWithItem(false);
     }
 
 }
