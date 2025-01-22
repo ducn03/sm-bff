@@ -36,6 +36,7 @@ public class SocketServer {
         SocketManager.getInstance().setListener(initSocketListener());
     }
 
+
     private SocketListener initSocketListener() {
         return new SocketListener() {
             @Override
