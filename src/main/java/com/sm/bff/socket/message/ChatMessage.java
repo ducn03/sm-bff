@@ -1,4 +1,4 @@
-package com.sm.lib.socket.message;
+package com.sm.bff.socket.message;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.sm.lib.socket;
+package com.sm.bff.socket;
 
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;

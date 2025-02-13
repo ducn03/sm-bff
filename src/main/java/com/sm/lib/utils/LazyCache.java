@@ -1,5 +1,8 @@
 package com.sm.lib.utils;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public abstract class LazyCache<T extends CacheData> implements ILazyCache<T> {
 
     private long time;
