@@ -1,9 +1,10 @@
-package com.sm.bff.socket;
+package com.sm.lib.socket;
 
 import com.sm.lib.service.redis.Redis;
 import com.sm.lib.utils.ILazyCache;
 import com.sm.lib.utils.LazyCache;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;
 import lombok.CustomLog;
@@ -22,6 +23,7 @@ public class SocketServer {
     private final Object lock = new Object();
     private final Redis redis;
 
+    @Inject
     public SocketServer(ILazyCache<LazyAnalytics> analyticsCache, Redis redis) {
         this.redis = redis;
         this.analyticsCache = new LazyCache<>(30000) {

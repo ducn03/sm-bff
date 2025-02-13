@@ -1,4 +1,4 @@
-package com.sm.bff.socket;
+package com.sm.lib.socket;
 
 public class SocketManager {
 

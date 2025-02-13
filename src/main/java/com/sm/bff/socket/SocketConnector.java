@@ -1,6 +1,6 @@
-package com.sm.bff.socket;
+package com.sm.lib.socket;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.CustomLog;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 @ServerEndpoint(value = "/webSocket", encoders = MessageEncoder.class, decoders = MessageDecoder.class)
-@ApplicationScoped
+@Singleton
 @CustomLog
 public class SocketConnector {
 
