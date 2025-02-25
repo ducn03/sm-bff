@@ -12,32 +12,48 @@ public class ResponseData {
     private Object data;
 
     public static ResponseData success(Object data) {
+        return buildResponseData(data, null);
+    }
+
+    public static ResponseData success(Object data, Object pagination) {
+        return buildResponseData(data, pagination);
+    }
+
+    private static ResponseData buildResponseData(Object data, Object pagination) {
         ResponseData responseData = new ResponseData();
-        responseData.setMeta(
-                new Meta(ErrorCodes.OK, "success",
-                responseData.getRequestId(),
-                responseData.generateResponseId() )
-        );
+        Meta meta = new Meta();
+        meta.setReturnCode(getSuccessCode());
+        meta.setMessage(getSuccessMessage());
+        responseData.setMeta(meta);
         responseData.setData(data);
+
+        // Trả data phân trang nếu có
+        if (pagination != null) {
+            responseData.getMeta().setPagination(pagination);
+        }
+
         return responseData;
     }
 
-    public static ResponseData error(int error, String message) {
+
+    public static ResponseData error(int code, String message) {
         ResponseData responseData = new ResponseData();
-        responseData.setMeta(
-                new Meta(error, message,
-                        responseData.getRequestId(),
-                        responseData.generateResponseId() )
-        );
+        Meta meta = new Meta();
+        meta.setReturnCode(code);
+        meta.setMessage(message);
+        responseData.setMeta(meta);
         responseData.setData(null);
         return responseData;
     }
 
-    private String getRequestId() {
-        return UUID.randomUUID().toString();
+    private static String getSuccessMessage(){
+        return "Success";
     }
 
-    private String generateResponseId() {
-        return UUID.randomUUID().toString();
+    /**
+     * HTTP 200 OK
+     */
+    private static int getSuccessCode(){
+        return 200;
     }
 }

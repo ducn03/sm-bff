@@ -8,6 +8,19 @@ import jakarta.inject.Inject;
 
 import java.util.Map;
 
+/**
+ * Redis cache hoạt động ở mức độ server và truy cập thông qua network. <br>
+ * 📌 **Ưu điểm:** <br>
+ * ✅ Hiệu suất cao và nhanh hơn so với truy vấn database, nhưng vẫn có độ trễ do network. <br>
+ * ✅ Dễ dàng mở rộng (scalable), có thể hoạt động trên nhiều server. <br>
+ * ✅ Dữ liệu được lưu trữ bền vững hơn, ngay cả khi server ứng dụng bị restart. <br>
+ * ✅ Hỗ trợ TTL tự động, giúp kiểm soát bộ nhớ hiệu quả. <br>
+ *
+ * ⚠ **Nhược điểm:** <br>
+ * ❌ Vẫn có độ trễ do phải truyền tải dữ liệu qua mạng. <br>
+ * ❌ Cần thiết lập Redis server, có thể yêu cầu thêm tài nguyên hệ thống. <br>
+ */
+
 @ApplicationScoped
 public class Redis {
     /**

@@ -8,6 +8,8 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.CustomLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -17,38 +19,65 @@ import java.util.UUID;
 @CustomLog
 public class ControllerServiceImpl implements ControllerService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
     @Override
-    public Uni<Response> success(Object data) {
-        // Kiểm tra nếu data là Uni, nếu có thì đợi nó, nếu không thì trực tiếp trả về
-        if (!(data instanceof Uni)) {
-            log.info("response success:");
-            log.info(JsonHelper.toJson(data));
-            return Uni.createFrom().item(Response.ok(JsonHelper.toJson(ResponseData.success(data)))
-                    .header("Content-Type", "application/json")
-                    .build());
-        }
-        // Nếu data là Uni, xử lý theo cách của Uni
-        return ((Uni<?>) data).onItem().transform(item -> {
-            log.info("response success:");
-            log.info(JsonHelper.toJson(item));
-            return Response.ok(JsonHelper.toJson(ResponseData.success(item)))
-                    .header("Content-Type", "application/json")
-                    .build();
-        })
-        .onFailure().recoverWithUni(t -> {
-            if (t instanceof AppException appException) {
-                int errorCode = appException.getErrorCode();
-                return error(errorCode, getMessage(errorCode));
-            }
-            log.error("Error message: ", t);
-            return error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "SYSTEM ERROR");
-        });
+    public Uni<Response> success(Object dataUni) {
+        return ((Uni<?>) dataUni)
+                .map(this::buildSuccessResponse)
+                .onFailure().recoverWithUni(this::handleFailure);
     }
 
+    @Override
+    public Uni<Response> success(Object dataUni, Object paginationUni) {
+        return ((Uni<?>) dataUni).flatMap(data ->
+                ((Uni<?>) paginationUni).map(pagination -> buildSuccessResponse(data, pagination))
+        ).onFailure().recoverWithUni(this::handleFailure);
+    }
+
+    private Response buildSuccessResponse(Object data) {
+        ResponseData responseData = ResponseData.success(data);
+        setResponseMeta(responseData);
+
+        logger.info("Response: {}", JsonHelper.toJson(responseData.getData()));
+        return Response.ok(JsonHelper.toJson(responseData))
+                .header("Content-Type", "application/json")
+                .build();
+    }
+
+    private Response buildSuccessResponse(Object data, Object pagination) {
+        ResponseData responseData = ResponseData.success(data, pagination);
+        setResponseMeta(responseData);
+
+        logger.info("Response: {}", JsonHelper.toJson(responseData.getData()));
+        return Response.ok(JsonHelper.toJson(responseData))
+                .header("Content-Type", "application/json")
+                .build();
+    }
+
+    private void setResponseMeta(ResponseData responseData) {
+        responseData.getMeta().setRequestId(getRequestId());
+        responseData.getMeta().setResponseId(generateResponseId());
+    }
+
+    private Uni<Response> handleFailure(Throwable t) {
+        if (t instanceof AppException appException) {
+            int errorCode = appException.getErrorCode();
+            return error(errorCode, getMessage(errorCode));
+        }
+        logger.error("Error message: ", t);
+        return systemError();
+    }
+
+
+
+    @Override
     public Uni<Response> error(int error, String message) {
-        log.info(error + ": " + message);
         return Uni.createFrom().item(ResponseData.error(error, message))
                 .onItem().transform(responseData -> {
+                    responseData.getMeta().setRequestId(getRequestId());
+                    responseData.getMeta().setResponseId(generateResponseId());
+
                     Response.ResponseBuilder builder = switch (error) {
                         case ErrorCodes.SYSTEM.UNAUTHORIZED -> Response.status(Response.Status.UNAUTHORIZED);
                         case ErrorCodes.SYSTEM.BAD_REQUEST -> Response.status(Response.Status.BAD_REQUEST);
@@ -64,12 +93,18 @@ public class ControllerServiceImpl implements ControllerService {
                 });
     }
 
+
     @Override
     public Uni<Response> systemError() {
-        log.trace("response system error");
-        return Uni.createFrom().item(Response.ok(JsonHelper.toJson(ResponseData.error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "System Error")))
-                .header("Content-Type", "application/json")
-                .build());
+        return error(ErrorCodes.SYSTEM.SYSTEM_ERROR, "SYSTEM ERROR");
+    }
+
+    private String getRequestId() {
+        return UUID.randomUUID().toString();
+    }
+
+    private String generateResponseId() {
+        return UUID.randomUUID().toString();
     }
 
     public String getMessage(int errorCode) {
@@ -78,7 +113,7 @@ public class ControllerServiceImpl implements ControllerService {
             ResourceBundle bundle = ResourceBundle.getBundle("message_vi", currentLocale);
             return bundle.getString(String.valueOf(errorCode));
         } catch (Exception e) {
-            log.warn("Code " + errorCode + " is not yet registered");
+            logger.warn("Code " + errorCode + " is not yet registered");
             return "Message not available";
         }
     }

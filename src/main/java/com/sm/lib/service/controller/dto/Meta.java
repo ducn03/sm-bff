@@ -1,5 +1,6 @@
 package com.sm.lib.service.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
@@ -9,6 +10,8 @@ public class Meta {
     private String message;
     private String requestId;
     private String responseId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Object pagination;
 
     public Meta() {
 

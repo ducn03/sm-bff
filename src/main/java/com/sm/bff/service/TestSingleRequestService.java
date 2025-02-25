@@ -2,21 +2,27 @@ package com.sm.bff.service;
 
 import com.sm.lib.helper.JsonHelper;
 import com.sm.lib.service.redis.Redis;
+import com.sm.lib.service.local.request.SingleRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.CustomLog;
 
 @ApplicationScoped
+@CustomLog
 public class TestSingleRequestService {
     private final Redis redis;
+    private final SingleRequest singleRequest;
 
     @Inject
-    public TestSingleRequestService(Redis redis) {
+    public TestSingleRequestService(Redis redis, SingleRequest singleRequest) {
         this.redis = redis;
+        this.singleRequest = singleRequest;
     }
 
     public Uni<Boolean> isRequested(String key, long ttl){
         runExample();
+        log.info("result: " + singleRequest.singleRequest(key, ttl));
         return redis.singleRequest(key, ttl);
     }
 
