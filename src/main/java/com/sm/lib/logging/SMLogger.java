@@ -32,25 +32,16 @@ public class SMLogger implements ILogger {
 
     @Override
     public void debug(String message) {
-        if (message == null) {
-            return;
-        }
         LOG.debug("(" + Thread.currentThread().getId() + "): " + message);
     }
 
     @Override
     public void warn(String message) {
-        if (message == null) {
-            return;
-        }
         LOG.warn("(" + Thread.currentThread().getId() + "): " + message);
     }
 
     @Override
     public void trace(String message) {
-        if (message == null) {
-            return;
-        }
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         String className = stackTraceElements[2].getClassName();
         String methodName = stackTraceElements[2].getMethodName();

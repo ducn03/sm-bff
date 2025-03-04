@@ -1,17 +1,21 @@
 # Uni và Multi trong Mutiny
-### 0.2.1 Uni và Multi trong Mutiny
+
+### Uni và Multi
 Mutiny cung cấp hai loại đối tượng chính để xử lý lập trình bất đồng bộ trong Quarkus:
 
-| Cú pháp     | Mô tả                                                        |
-|-------------|--------------------------------------------------------------|
-| Uni<T>      | Trả về một giá trị duy nhất (ví dụ: lấy thông tin một user). |
-| Multi<T>    | Trả về nhiều giá trị (ví dụ: stream dữ liệu từ database).    |
+| Cú pháp     | Mô tả                                                                                                                          |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Uni<T>      | Đại diện cho một tác vụ bất đồng bộ, phát ra tối đa một giá trị duy nhất, một lỗi hoặc hoàn thành mà không có giá trị nào.     |
+| Multi<T>    | Đại diện cho một luồng dữ liệu bất đồng bộ, có thể phát ra nhiều giá trị, có thể kết thúc sau một thời gian hoặc chạy mãi mãi. |
 
 ### 0.2.2 Uni<T> - Một-và-Chỉ-Một (One-and-Only Dish)
 #### 0.2.2.1 Giải thích đơn giản.
-**Uni<T>** giống như bạn order một món **duy nhất** trong nhà hàng.
-Bạn chỉ nhận được **một** kết quả (hoặc là món ăn, hoặc là... báo hết món!).
-Nó đại diện cho một **hoạt động bất đồng bộ** mà bạn mong đợi chỉ trả về **một giá trị** thành công, hoặc một lỗi nếu có vấn đề xảy ra.
+
+`Uni<T>` giống như bạn đi ăn ở nhà hàng và gọi một món ăn. Bạn chỉ có thể nhận được một trong ba kết quả:
+
+- **Món ăn được mang ra ngon lành 🍜** → Thành công, bạn có kết quả như mong đợi.
+- **Phục vụ báo hết món ❌** → Thất bại, bạn không nhận được gì.
+- **Bạn gọi món nhưng phục vụ quên luôn 😅** → Chẳng có món nào được mang ra, nhưng cũng không có báo lỗi gì cả (hoàn thành mà không có giá trị).
 
 #### 0.2.2.2 Ví dụ:
 
@@ -56,7 +60,7 @@ Nó đại diện cho một **hoạt động bất đồng bộ** mà bạn mong
 > Uni<T> trong Mutiny là một Reactive Stream Publisher (nhà phát hành luồng phản ứng) được thiết kế đặc biệt để đại diện cho một kết quả bất đồng bộ duy nhất. 
 > Nó hứa hẹn sẽ phát ra tối đa một item (giá trị) kiểu T, hoặc một tín hiệu lỗi (failure), hoặc tín hiệu hoàn thành (completion) mà không có giá trị nào.
 
-### 0.2.3 Multi<T> - Buffet Dữ Liệu (Data Buffet) - "Đại Tiệc Buffet Dữ Liệu" - All-You-Can-Eat Data Stream!
+### Multi<T> – "Xử lý luồng dữ liệu như một bữa tiệc buffet!"
 #### 0.2.3.1 Giải thích đơn giản
 
 Hãy tưởng tượng bạn có một **ống nước. Multi** giống như cái ống nước đó.
@@ -86,7 +90,8 @@ Hãy tưởng tượng bạn có một **ống nước. Multi** giống như cá
 
 #### 0.2.3.3 Chuyên sâu
 
-**Multi<T> trong Mutiny** là một **Reactive Stream Publisher** (nhà phát hành luồng phản ứng) đại diện cho một **luồng dữ liệu bất đồng bộ** có thể phát ra **không giới hạn số lượng item** (giá trị) kiểu T.
+`Multi<T>` đại diện cho một luồng dữ liệu bất đồng bộ, có thể phát ra **một hoặc nhiều** giá trị theo thời gian. 
+Nó có thể **kết thúc** sau khi phát **hết dữ liệu** (finite stream) hoặc **tiếp tục mãi mãi** (infinite stream).
 
 #### 0.2.3.4 Các đặc điểm cốt lõi của Multi
 
@@ -107,16 +112,23 @@ Hãy tưởng tượng bạn có một **ống nước. Multi** giống như cá
 
   - **Hoàn thành (Completion):** Luồng phát ra tất cả các giá trị (nếu có) và sau đó kết thúc thành công.
     Không có giá trị nào được phát ra sau khi hoàn thành.
-  - **Lỗi (Error):** Trong quá trình phát luồng, có thể xảy ra lỗi.
-    Khi lỗi xảy ra, luồng sẽ kết thúc và thông báo lỗi cho subscriber (người đăng ký nhận dữ liệu).
-    Không có giá trị nào được phát ra sau khi lỗi xảy ra.
+  - **Lỗi (Error):** Multi có thể gặp lỗi trong quá trình phát luồng. 
+  Nếu không có xử lý lỗi, nó sẽ kết thúc ngay khi gặp lỗi. 
+  Tuy nhiên, chúng ta có thể dùng `onFailure().recoverWithItem()` hoặc `onFailure().continueWith()` để xử lý lỗi và tiếp tục phát giá trị.
 
+  - **Backpressure (Áp lực ngược)** là một cơ chế quan trọng trong Reactive Streams, giúp **Subscriber** (người nhận dữ liệu) kiểm soát tốc độ mà **Publisher** (người phát dữ liệu) gửi dữ liệu đến.
 
-- **Backpressure (Áp lực ngược):** Đây là một tính năng quan trọng của Reactive Streams, và Multi cũng hỗ trợ nó.
-  **Backpressure** là cơ chế cho phép **subscriber (người nhận dữ liệu)** thông báo cho **publisher (người phát dữ liệu)** biết tốc độ mà nó có thể xử lý dữ liệu.
-  Nếu subscriber bị quá tải, nó có thể yêu cầu publisher **chậm lại** hoặc **ngừng gửi dữ liệu** để tránh tràn bộ nhớ hoặc giảm hiệu suất.
-  Điều này đặc biệt quan trọng khi xử lý các luồng dữ liệu lớn hoặc từ các nguồn chậm.
-
+    Nói đơn giản, nếu **Subscriber xử lý không kịp**, nó có thể yêu cầu **Publisher giảm tốc độ gửi**, tạm dừng, hoặc bỏ bớt dữ liệu để tránh quá tải.
+    
+    📌 **Backpressure chỉ áp dụng cho Multi**, không phải Uni, vì Uni chỉ phát ra một giá trị duy nhất nên không cần kiểm soát dòng dữ liệu.
+    
+    Một số cách phổ biến để quản lý **Backpressure** trong Multi:
+    
+    - `request(n)` – Yêu cầu n phần tử mỗi lần.
+    - `buffer()` – Lưu trữ tạm thời dữ liệu nếu Subscriber xử lý chậm.
+    - `throttle()` – Giới hạn số lượng dữ liệu được gửi trong một khoảng thời gian.
+    > Tuy nhiên, cần lưu ý rằng **Mutiny’s Multi** **không tuân theo** cơ chế **Backpressure mặc định** của Reactive Streams. 
+    Thay vào đó, cung cấp cơ chế riêng để kiểm soát dòng dữ liệu, chẳng hạn như `.onOverflow()`, `.select().first(n)`, và `.invoke()` để điều chỉnh tốc độ xử lý."
 #### 0.2.3.5 Khi nào nên sử dụng Multi
 
 - **Xử lý luồng dữ liệu liên tục:** Ví dụ: dữ liệu cảm biến, log hệ thống, sự kiện người dùng, thông tin thị trường chứng khoán real-time.
@@ -140,3 +152,4 @@ Hãy tưởng tượng một nhà máy sản xuất kẹo, có một dây chuy�
 - **Dây chuyền có thể chạy liên tục** (stream dữ liệu vô tận - nếu có đủ nguyên liệu), hoặc chạy hết nguyên liệu rồi dừng (stream dữ liệu hữu hạn).
 - Nếu dây chuyền bị **kẹt** hoặc **hỏng** (lỗi), việc sản xuất kẹo sẽ dừng lại.
 - Nếu công nhân **đóng gói không kịp** (subscriber xử lý chậm), dây chuyền có thể chậm lại (backpressure) để tránh kẹo bị tràn ra.
+- Nếu dây chuyền bị lỗi ở một công đoạn, hệ thống có thể chọn dừng hẳn hoặc tiếp tục sản xuất các viên kẹo khác bằng cách xử lý lỗi. Trong Mutiny, có thể dùng `.onFailure().recoverWithItem()` để phát ra giá trị thay thế, hoặc `.onFailure().continueWith()` để tiếp tục mà không cần thay thế.

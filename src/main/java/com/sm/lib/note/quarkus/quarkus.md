@@ -6,7 +6,7 @@
 | [Mutiny](./core/Mutiny.md)                   | Reactive Programming Library         | Thư viện reactive chính của Quarkus, hỗ trợ Uni<T> và Multi<T>.   |
 | [Uni & Multi](./core/Uni-Multi.md)           | Reactive Types                       | Uni<T> xử lý một kết quả, Multi<T> xử lý nhiều kết quả (stream).  |
 | [CompletionStage](./core/CompletionStage.md) | Future-based Asynchronous Processing | API bất đồng bộ dựa trên Java CompletableFuture.                  |
-| Publisher                                    | Reactive Streams Specification       | Định nghĩa cách xử lý dữ liệu stream theo chuẩn Reactive Streams. |
+| [Publisher](./core/Publisher.md)             | Reactive Streams Specification       | Định nghĩa cách xử lý dữ liệu stream theo chuẩn Reactive Streams. |
 | Multi<T>                                     | Vert.x                               | Hệ thống event loop giúp Quarkus vận hành non-blocking.           |
 
 
