@@ -1,13 +1,13 @@
 # Danh sách đầy đủ các thành phần trong Quarkus Reactive
 
 ## 1. Reactive Core (Cốt lõi của Reactive)
-| Thành phần                                   | Thuật ngữ chuyên ngành               | Mô tả                                                             |
-|----------------------------------------------|--------------------------------------|-------------------------------------------------------------------|
-| [Mutiny](./core/Mutiny.md)                   | Reactive Programming Library         | Thư viện reactive chính của Quarkus, hỗ trợ Uni<T> và Multi<T>.   |
-| [Uni & Multi](./core/Uni-Multi.md)           | Reactive Types                       | Uni<T> xử lý một kết quả, Multi<T> xử lý nhiều kết quả (stream).  |
-| [CompletionStage](./core/CompletionStage.md) | Future-based Asynchronous Processing | API bất đồng bộ dựa trên Java CompletableFuture.                  |
-| [Publisher](./core/Publisher.md)             | Reactive Streams Specification       | Định nghĩa cách xử lý dữ liệu stream theo chuẩn Reactive Streams. |
-| Multi<T>                                     | Vert.x                               | Hệ thống event loop giúp Quarkus vận hành non-blocking.           |
+| Thành phần                                       | Thuật ngữ chuyên ngành               | Mô tả                                                             |
+|--------------------------------------------------|--------------------------------------|-------------------------------------------------------------------|
+| [Mutiny](./core/Mutiny.md)                       | Reactive Programming Library         | Thư viện reactive chính của Quarkus, hỗ trợ Uni<T> và Multi<T>.   | 
+| [Uni & Multi](./core/Uni-Multi.md)               | Reactive Types                       | Uni<T> xử lý một kết quả, Multi<T> xử lý nhiều kết quả (stream).  |
+| [CompletionStage](./core/CompletionStage.md)     | Future-based Asynchronous Processing | API bất đồng bộ dựa trên Java CompletableFuture.                  |
+| [Publisher](./core/Publisher.md)                 | Reactive Streams Specification       | Định nghĩa cách xử lý dữ liệu stream theo chuẩn Reactive Streams. |
+| [Multi<T>](./core/MultiT.md)                     | Vert.x                               | Hệ thống event loop giúp Quarkus vận hành non-blocking.           |
 
 
 ## 2. Reactive Database (Xử lý Database bất đồng bộ)

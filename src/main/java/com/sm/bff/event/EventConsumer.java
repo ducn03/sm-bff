@@ -20,14 +20,14 @@ public class EventConsumer {
     public Uni<Void> handleEvent(String message) {
         EventMessage eventMessage = JsonHelper.toObject(message, EventMessage.class);
         if (eventMessage == null){
-            log.info("Gửi message bị lỗi, vui lòng coi lại message gửi đi");
+            log.warn("Gửi message bị lỗi, vui lòng coi lại message gửi đi");
             log.info("Message: " + eventMessage);
             return Uni.createFrom().voidItem();
         }
         // Lấy service để handle
         BaseEventConsumer consumer = eventFactory.getConsumer(eventMessage.getType());
         if (consumer == null){
-            log.info("⚠ No consumer found for event: " + eventMessage.getType());
+            log.warn("⚠ No consumer found for event: " + eventMessage.getType());
             return Uni.createFrom().voidItem();
         }
         log.info("📩 Dispatching event: " + eventMessage.getType());

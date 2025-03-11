@@ -21,8 +21,8 @@ public class TestSingleRequestService {
     }
 
     public Uni<Boolean> isRequested(String key, long ttl){
-        runExample();
-        log.info("result: " + singleRequest.singleRequest(key, ttl));
+        // runExample();
+        log.trace("result: " + singleRequest.singleRequest(key, ttl));
         return redis.singleRequest(key, ttl);
     }
 

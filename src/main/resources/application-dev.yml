@@ -8,6 +8,8 @@
     kafka:
       # ceres.thecoffeebox.vn:9092
       bootstrap-servers: ${COM_HC_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      devservices:
+        enabled: ${COM_SM_DEVSERVICES_ENABLED:false}
 
     datasource:
       db-kind: ${COM_SM_DATABASE_DB_KIND:mysql}
