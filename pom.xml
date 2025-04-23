@@ -74,7 +74,22 @@
             <version>1.18.26</version> <!-- Sử dụng phiên bản mới nhất -->
             <scope>provided</scope>
         </dependency>
+        <!-- JWT -->
+        <!-- COMMENT VÌ TÔI CẢM THẤY JWT THỰC SỰ KO HIỆU QUẢ ĐỐI VỚI TÔI ... -->
 <!--        <dependency>-->
+<!--            <groupId>io.quarkus</groupId>-->
+<!--            <artifactId>quarkus-smallrye-jwt</artifactId>-->
+<!--        </dependency>-->
+
+        <!-- HASH -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+
+        <!--        <dependency>-->
 <!--            <groupId>io.quarkus</groupId>-->
 <!--            <artifactId>quarkus-messaging-kafka</artifactId>-->
 <!--        </dependency>-->

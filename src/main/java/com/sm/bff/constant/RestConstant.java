@@ -15,4 +15,22 @@ public interface RestConstant {
         boolean READ = true;
         boolean UNREAD = false;
     }
+
+    interface AUTH {
+
+    }
+
+    interface TOKEN {
+        String TOKEN_PREFIX = "COM.SM.BFF.TOKEN.";
+        String REFRESH_TOKEN_PREFIX = "COM.SM.BFF.REFRESH-TOKEN.";
+        String USER_TOKEN_PREFIX = "COM.SM.BFF.USER-TOKEN.";
+        /**
+         * 3 tiếng
+         */
+        long TOKEN_TIME = 10800;
+        /**
+         * 3 ngày
+         */
+        long REFRESH_TOKEN_TIME = 259200;
+    }
 }

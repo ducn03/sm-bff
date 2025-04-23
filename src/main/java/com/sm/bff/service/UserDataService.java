@@ -43,7 +43,7 @@ public class UserDataService {
         user.setPassword(updatedUser.getPassword());
         user.setPhone(updatedUser.getPhone());
         user.setEmail(updatedUser.getEmail());
-        user.setFullname(updatedUser.getFullname());
+        user.setFullName(updatedUser.getFullName());
     }
 
     @Transactional

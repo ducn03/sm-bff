@@ -1,6 +1,6 @@
 package com.sm.jpa.domain;
 
-import com.sm.jpa.PanacheEntity;
+import com.sm.jpa.domain.core.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

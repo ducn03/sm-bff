@@ -1,6 +1,6 @@
 package com.sm.jpa.domain;
 
-import com.sm.jpa.PanacheEntity;
+import com.sm.jpa.domain.core.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +19,5 @@ public class User extends PanacheEntity {
     @Column(name = "email")
     private String email;
     @Column(name = "fullname")
-    private String fullname;
+    private String fullName;
 }

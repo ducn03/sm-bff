@@ -5,9 +5,11 @@ import com.sm.jpa.domain.Notify;
 import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 
+@ApplicationScoped
 public class NotifyRepository implements PanacheRepositoryBase<Notify, Long> {
     public PanacheQuery<Notify> findQueryNotifyByUserId(long userId, int pageIndex, int pageSize) {
         return find("userId = ?1 ORDER BY notifyDate DESC", userId).page(pageIndex, pageSize);
