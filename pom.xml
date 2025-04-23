@@ -74,10 +74,10 @@
             <version>1.18.26</version> <!-- Sử dụng phiên bản mới nhất -->
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-messaging-kafka</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkus</groupId>-->
+<!--            <artifactId>quarkus-messaging-kafka</artifactId>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 <!--        <dependency>-->
 <!--            <groupId>ch.qos.logback</groupId>-->

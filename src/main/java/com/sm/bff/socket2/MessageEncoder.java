@@ -1,4 +1,4 @@
-package com.sm.bff.socket;
+package com.sm.bff.socket2;
 
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.Encoder;

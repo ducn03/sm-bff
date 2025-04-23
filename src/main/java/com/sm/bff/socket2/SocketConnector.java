@@ -1,4 +1,4 @@
-package com.sm.bff.socket;
+package com.sm.bff.socket2;
 
 import jakarta.inject.Singleton;
 import jakarta.websocket.*;
@@ -39,7 +39,7 @@ public class SocketConnector {
     public void onError(Session session, Throwable t) {
         if (this.listener != null) {
             this.listener.onError(session, t);
-            // giữ listener không remove để các socket khác vẫn dùng đc
+            // giữ listener không remove để các socket2 khác vẫn dùng đc
             // this.listener = null;
         }
 

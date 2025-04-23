@@ -1,4 +1,4 @@
-package com.sm.bff.socket;
+package com.sm.bff.socket2;
 
 import com.sm.lib.utils.ILazyCache;
 import com.sm.lib.utils.LazyCache;
