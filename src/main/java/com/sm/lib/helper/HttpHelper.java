@@ -3,6 +3,7 @@ package com.sm.lib.helper;
 import com.sm.lib.dto.UserInfo;
 import com.sm.lib.exception.ErrorCodes;
 import com.sm.lib.utils.AppThrower;
+import com.sm.lib.utils.StringUtils;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import lombok.CustomLog;
@@ -29,11 +30,32 @@ public class HttpHelper {
             // Lấy body dưới dạng JsonObject
             JsonObject jsonObject = context.body().asJsonObject();
             if (jsonObject == null) {
-                AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
+                return null;
             }
 
             // Chuyển JsonObject thành đối tượng theo kiểu Class<T>
             return jsonObject.mapTo(clazz);
+        } catch (Exception e) {
+            logger.warn("Exception error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static String getHeaderAuthorization(RoutingContext context) {
+        return getHeader(context, "Authorization");
+    }
+
+    public static String getHeaderLang(RoutingContext context) {
+        return getHeader(context, "hc-lang");
+    }
+
+    public static String getHeader(RoutingContext context, String headerName) {
+        try {
+            String token = context.request().getHeader(headerName);
+            if (StringUtils.isNullOrEmpty(token)) {
+                return null;
+            }
+            return token;
         } catch (Exception e) {
             logger.warn("Exception error: " + e.getMessage());
             return null;
@@ -50,25 +72,8 @@ public class HttpHelper {
     public static UserInfo getUserInfo(RoutingContext context) {
         Object userInfo = context.get("user-info");
         if (userInfo == null) {
-            AppThrower.ep(ErrorCodes.SYSTEM.BAD_REQUEST);
+            return null;
         }
         return (UserInfo) userInfo;
-    }
-
-    /**
-     * Lấy danh sách số từ query param.
-     *
-     * @param context  RoutingContext chứa thông tin query
-     * @param paramName Tên của query parameter
-     * @return Danh sách số
-     */
-    public static List<Long> getListNumberFromQueryParam(RoutingContext context, String paramName) {
-        List<String> queryParams = context.queryParam(paramName);
-        if (queryParams == null) {
-            return Collections.emptyList();
-        }
-        return queryParams.stream()
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
     }
 }
