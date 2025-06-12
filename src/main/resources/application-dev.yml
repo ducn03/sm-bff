@@ -14,7 +14,7 @@
     datasource:
       db-kind: ${COM_SM_DATABASE_DB_KIND:mysql}
       reactive:
-        url: ${COM_SM_DATABASE_URL:mysql://localhost:3307/socialmedia}
+        url: ${COM_SM_DATABASE_URL}
         driver: ${COM_SM_DATABASE_DRIVER:com.mysql.cj.jdbc.Driver}
       username: ${COM_SM_DATABASE_USERNAME:root}
       password: ${COM_SM_DATABASE_PASSWORD:root}

@@ -18,10 +18,21 @@ public class NotifyGenerator {
         this.notifyMapper = notifyMapper;
     }
 
+    /**
+     * Tạo ra những thông báo cho người dùng
+     * @param request
+     * @return
+     */
     @Transactional
     public Uni<NotifyDTO> generate(NotifyRequest request){
         Notify notify = notifyMapper.toEntity(request);
         return notifyRepository.persist(notify)
                 .map(notifyMapper::toDTO);
+    }
+
+    @Transactional
+    public Uni<Void> process(NotifyRequest request){
+        Notify notify = notifyMapper.toEntity(request);
+        return notifyRepository.persist(notify).replaceWithVoid();
     }
 }

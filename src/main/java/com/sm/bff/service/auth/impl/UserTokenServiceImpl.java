@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.CustomLog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @CustomLog
@@ -41,7 +42,7 @@ public class UserTokenServiceImpl implements UserTokenService {
         if (userToken.getTokenList() == null ||
                 userToken.getTokenList().isEmpty())
         {
-            userToken.setTokenList(new ArrayList<>());
+            userToken.setTokenList(new HashSet<>());
         }
         userToken.getTokenList().add(newToken);
         log.info("User token: " + userToken);
